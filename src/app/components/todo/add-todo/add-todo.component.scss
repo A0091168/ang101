@@ -1,0 +1,43 @@
+.add-todo-container {
+  margin-bottom: 15px;
+}
+
+.add-todo-header {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 10px; 
+  margin-bottom: 10px; 
+}
+
+.add-todo-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px; 
+  
+  .form-group {
+    display: flex; 
+    flex-direction: column; 
+    
+    input[type="text"], input[type="date"], select {
+      width: 100%; 
+      padding: 10px; 
+      box-sizing: border-box; 
+      height: 50px; 
+    }
+
+    .add {
+      padding: 5px 10px; 
+      background-color: #3f51b5;
+      color: white;
+      border: none;
+      cursor: pointer;
+      height: 30px; 
+      font-size: 14px; 
+      align-self: flex-start; 
+    }
+
+    .add:hover {
+      background-color: #303f9f;
+    }
+  }
+}

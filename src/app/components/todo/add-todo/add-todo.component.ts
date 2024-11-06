@@ -1,28 +1,47 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-add-todo',
   standalone: true,
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './add-todo.component.html',
-  styleUrls: ['./add-todo.component.scss']
+  styleUrls: ['./add-todo.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      state('void', style({ opacity: 0 })),
+      transition(':enter', [
+        animate('500ms ease-in', style({ opacity: 1 }))
+      ])
+    ])
+  ]
 })
 export class AddTodoComponent {
-  newTodo: string = '';
-  dueDate: string = '';
-  priority: number = 1; 
+  todoForm: FormGroup;
 
   @Output() todoAdded = new EventEmitter<{ name: string; date: string; priority: number }>();
 
+  constructor() {
+    this.todoForm = new FormGroup({
+      newTodo: new FormControl('', Validators.required),
+      dueDate: new FormControl('', Validators.required),
+      priority: new FormControl(1, Validators.required)
+    });
+  }
+
   addTodo() {
-    if (this.newTodo && this.dueDate) {
-      this.todoAdded.emit({ name: this.newTodo, date: this.dueDate, priority: this.priority });
-      this.newTodo = '';
-      this.dueDate = '';
-      this.priority = 1; 
+    if (this.todoForm.valid) {
+      const todo = {
+        name: this.todoForm.get('newTodo')?.value,
+        date: this.todoForm.get('dueDate')?.value,
+        priority: this.todoForm.get('priority')?.value
+      };
+      console.log('Emitting todo:', todo); // Debugging statement
+      this.todoAdded.emit(todo);
+      this.todoForm.reset({ priority: 1 });
+    } else {
+      alert('Ensure all the fields are filled');
     }
-    else {alert('Ensure all the fields are filled')}
-    
   }
 }
